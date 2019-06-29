@@ -16,8 +16,7 @@ RSpec.describe ImportsController, :type => :controller do
     {request_id: 'dummy_request_id', employee_name: 'Thor Odinson', email: 'thor@marvel.com',
      phone: 123454789,
      report_to: 'odinson@marvel', assigned_policies: 'Lightening Leave', company_id: 1,
-     file_name: 'marvels.csv',
-    }
+     file_name: 'marvels.csv'}
   }
 
   let(:valid_import_params) {{company_id: 1, file: file}}

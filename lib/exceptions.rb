@@ -4,4 +4,10 @@ module Exceptions
       super
     end
   end
+
+  class CompanyNotFoundException < StandardError
+    def initialize(msg = "Company does not exist")
+      super
+    end
+  end
 end

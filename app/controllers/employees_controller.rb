@@ -29,14 +29,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  def import_show
-    Employee.import(params[:file])
-  end
-
-  def import
-    Employee.import(params[:file])
-  end
-
   def update
     respond_to do |format|
       if @employee.update(employee_params)

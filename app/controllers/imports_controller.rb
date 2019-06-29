@@ -17,11 +17,17 @@ class ImportsController < ApplicationController
   end
 
   def create
-    @imports = Import.save_all(request.uuid, import_params)
-    Thread.new {|_| Import.process(request.uuid)}
+    begin
+      @imports = ImportsHelper.create_imports(request.uuid, import_params)
+      message = 'Import request accepted.'
+    rescue CSV::MalformedCSVError => e
+      message = 'Invalid csv uploaded! Please upload a valid csv.'
+    end
+
+    Thread.new {|_| ImportsHelper.process(request.uuid)}
 
     respond_to do |format|
-      format.html {redirect_to imports_path, notice: 'Import request accepted.'}
+      format.html {redirect_to imports_path, notice: message}
     end
   end
 
