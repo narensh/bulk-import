@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  # skip_before_action :set_employee, only: [:import]
 
   # GET /employees
   # GET /employees.json
@@ -35,6 +36,16 @@ class EmployeesController < ApplicationController
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def import_show
+    Employee.import(params[:file])
+    # redirect_to root_url, notice: 'Data Import Completed Successfully'
+  end
+
+  def import
+    Employee.import(params[:file])
+    # redirect_to root_url, notice: 'Data Import Completed Successfully'
   end
 
   # PATCH/PUT /employees/1

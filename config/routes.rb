@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :policies
-  resources :companies
-  resources :employees
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :policies, except: [:destroy]
+  resources :companies, except: [:destroy]
+  resources :employees, except: [:destroy]
+  resources :imports, param: :request_id, only: [:index, :show, :new, :create]
 end

@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1 class="import">Import Requests</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr>
+    <td>File Uploaded</td>
+    <td>Timestamp</td>
+    <td>Status</td>
+  </tr>
+
+  <% @imports.to_a.group_by {|i| i.request_id}.each do |request_id, import| %>
+    <tr>
+      <td><%= import.first.file_name %></td>
+      <td><%= import.first.created_at %></td>
+      <% status = import.map(&:status) %>
+      <td><%= status.all?(ImportStatus::COMPLETED) ? status.first : ((status - [ImportStatus::COMPLETED, ImportStatus::ERROR]).empty? ? ImportStatus::COMPLETED_WITH_ERRORS : ( status.all?(ImportStatus::NOT_STARTED) ? ImportStatus::NOT_STARTED : ImportStatus::IN_PROGRESS)) %>
+      </td>
+      <td><%= link_to 'Details', import_path(request_id: request_id) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+
+<%= link_to 'New Import', new_import_path %>

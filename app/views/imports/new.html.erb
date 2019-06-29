@@ -1,0 +1,14 @@
+<h1 class="import">Bulk Import Employees</h1>
+
+<%= form_for @import, url: {action: "create"} do |f| %>
+  <div class="form-fields">
+    Company &nbsp;&nbsp;<%= collection_select(:import, :company_id, Company.all, :id, :name) %>
+    <br/><br/>
+    <%= f.label :file do %>
+      Upload csv
+      <%= f.file_field :file, required: true, accept: '.csv' %>
+  <% end %>
+    <%= f.submit "Upload", class: 'form-actions' %>
+  </div>
+<% end %>
+<div><%= link_to 'Back', imports_path %></div>

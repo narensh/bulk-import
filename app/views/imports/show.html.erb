@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1 class="import">Import Request Details</h1>
+<table>
+  <tbody>
+  <tr>
+    <th>&nbsp;</th>
+    <td>Employee Name</td>
+    <td>Email</td>
+    <td>Phone</td>
+    <td>Report To</td>
+    <td>Assigned Policies</td>
+    <td>Company</td>
+    <td>Last Updated</td>
+    <td>Status</td>
+    <td>Message</td>
+  </tr>
+
+  <% @imports.each do |import| %>
+    <tr>
+      <th>&nbsp;</th>
+      <td><%= import.employee_name %></td>
+      <td><%= import.email %></td>
+      <td><%= import.phone %></td>
+      <td><%= import.report_to %></td>
+      <td><%= import.assigned_policies %></td>
+      <td><%= Company.find(import.company_id).name %></td>
+      <td><%= import.updated_at %></td>
+      <td><%= import.status %></td>
+      <td><%= import.message %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<div><%= link_to 'Back', imports_path %></div>

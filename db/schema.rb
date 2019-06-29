@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_20_082356) do
+ActiveRecord::Schema.define(version: 2019_06_27_185021) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
@@ -38,6 +38,21 @@ ActiveRecord::Schema.define(version: 2019_05_20_082356) do
     t.integer "policy_id", null: false
     t.index ["employee_id", "policy_id"], name: "index_employees_policies_on_employee_id_and_policy_id"
     t.index ["policy_id", "employee_id"], name: "index_employees_policies_on_policy_id_and_employee_id"
+  end
+
+  create_table "imports", force: :cascade do |t|
+    t.string "request_id", null: false
+    t.string "employee_name"
+    t.string "email"
+    t.integer "phone"
+    t.string "report_to"
+    t.string "assigned_policies"
+    t.integer "company_id"
+    t.string "file_name"
+    t.string "status", default: "NOT_STARTED"
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "policies", force: :cascade do |t|
