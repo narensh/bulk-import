@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.describe "employees/edit", :type => :view do
   before(:each) do
+    company = Company.create!(name: 'A Company')
     @employee = assign(:employee, Employee.create!(
-      :name => "MyString",
-      :email => "MyString",
-      :phone => "MyString",
-      :company => nil
+        :name => "A Employee",
+        :email => "a@company.com",
+        :phone => "1234354",
+        :company => company
     ))
   end
 

@@ -4,7 +4,7 @@ class Policy < ApplicationRecord
 
   validates_uniqueness_of :name, :scope => :company_id
 
-  def self.save_all(company_id, names)
+  def self.fetch_or_save(company_id, names)
     names.map do |name|
       Policy.find_or_create_by({name: name, company_id: company_id})
     end

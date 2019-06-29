@@ -12,24 +12,11 @@ RSpec.describe ImportsController, :type => :routing do
     end
 
     it "routes to #show" do
-      expect(:get => "/imports/1").to route_to("imports#show", :id => "1")
-    end
-
-    it "routes to #edit" do
-      expect(:get => "/imports/1/edit").to route_to("imports#edit", :id => "1")
+      expect(:get => "/imports/1").to route_to("imports#show", :request_id => "1")
     end
 
     it "routes to #create" do
       expect(:post => "/imports").to route_to("imports#create")
     end
-
-    it "routes to #update" do
-      expect(:put => "/imports/1").to route_to("imports#update", :id => "1")
-    end
-
-    it "routes to #destroy" do
-      expect(:delete => "/imports/1").to route_to("imports#destroy", :id => "1")
-    end
-
   end
 end

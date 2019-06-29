@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "companies/edit", :type => :view do
   before(:each) do
     @company = assign(:company, Company.create!(
-      :name => "MyString"
+      :name => "A Company"
     ))
   end
 

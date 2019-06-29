@@ -26,10 +26,5 @@ RSpec.describe EmployeesController, :type => :routing do
     it "routes to #update" do
       expect(:put => "/employees/1").to route_to("employees#update", :id => "1")
     end
-
-    it "routes to #destroy" do
-      expect(:delete => "/employees/1").to route_to("employees#destroy", :id => "1")
-    end
-
   end
 end

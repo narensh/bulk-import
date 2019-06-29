@@ -26,10 +26,5 @@ RSpec.describe PoliciesController, :type => :routing do
     it "routes to #update" do
       expect(:put => "/policies/1").to route_to("policies#update", :id => "1")
     end
-
-    it "routes to #destroy" do
-      expect(:delete => "/policies/1").to route_to("policies#destroy", :id => "1")
-    end
-
   end
 end

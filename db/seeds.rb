@@ -7,6 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 #
 # Sick Leave|Annual Leave|Maternity Leave
+
+return unless Rails.env == 'development'
+
 company = Company.create(name: 'Alphabet')
 policies = Policy.create([
                              {name: 'Sick Leave', company_id: company.id},

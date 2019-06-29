@@ -11,21 +11,10 @@ class Employee < ApplicationRecord
   acts_as_nested_set
 
   def self.import(employee_data, all_policies)
-    status = ImportStatus::COMPLETED
-    begin
-      status = ImportStatus::MANAGER_ASSIGNMENT_PENDING unless employee_data.report_to.blank?
-
-      @employee = Employee.new(name: employee_data.employee_name, email: employee_data.email, phone: employee_data.phone,
-                               company_id: employee_data.company_id)
-      @employee.policies = fetch_policies(all_policies, employee_data.assigned_policies)
-      @employee.save!
-
-    rescue ActiveRecord::RecordInvalid => e
-      status = ImportStatus::ERROR
-      message = e.message
-    end
-
-    employee_data.update(status: status, message: message)
+    @employee = Employee.new(name: employee_data.employee_name, email: employee_data.email, phone: employee_data.phone,
+                             company_id: employee_data.company_id)
+    @employee.policies = fetch_policies(all_policies, employee_data.assigned_policies)
+    @employee.save!
     @employee
   end
 
@@ -41,6 +30,7 @@ class Employee < ApplicationRecord
   end
 
   private
+
   def self.fetch_policies(all_policies, employee_policy_names)
     employee_policies = []
     Policy.names_to_array(employee_policy_names).map do |employee_policy_name|

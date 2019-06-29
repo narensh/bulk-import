@@ -1,6 +1,9 @@
 require 'csv'
 class Import < ApplicationRecord
-  BATCH_SIZE = 1000
+  validates :request_id, presence: true
+
+  # move to configuration
+  BATCH_SIZE = 100
 
   def self.save_all(request_id, params)
     records = []
@@ -19,7 +22,13 @@ class Import < ApplicationRecord
       policies = process_policies(requests)
       mark_in_progress(requests)
       requests.each do |request|
-        Employee.import(request, policies)
+        begin
+          status = request.report_to.blank? ? ImportStatus::COMPLETED : ImportStatus::MANAGER_ASSIGNMENT_PENDING
+          Employee.import(request, policies)
+        rescue ActiveRecord::RecordInvalid => e
+          message = e.message
+        end
+        request.update(status: message.blank? ? status : ImportStatus::ERROR, message: message)
       end
     end
     assign_managers(request_id)
@@ -54,7 +63,7 @@ class Import < ApplicationRecord
     assigned_policies << requests.map {|request| Policy.names_to_array(request.assigned_policies)}
     assigned_policies.flatten!
     assigned_policies.uniq!
-    Policy.save_all(requests.first.company_id, assigned_policies)
+    Policy.fetch_or_save(requests.first.company_id, assigned_policies)
   end
 
   def self.mark_in_progress(requests)
