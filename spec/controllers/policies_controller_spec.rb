@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe PoliciesController, :type => :controller do
 
+  before {warden.set_user User.create(email: 'Thor', password: 'password', password_confirmation: 'password')}
+
   let(:company) {Company.create!(name: 'A Company')}
 
   let(:valid_attributes) {{name: 'A Policy', company_id: company.id}}

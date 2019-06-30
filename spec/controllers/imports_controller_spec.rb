@@ -2,6 +2,8 @@ require 'rails_helper'
 include ActionDispatch::Http
 RSpec.describe ImportsController, :type => :controller do
 
+  before {warden.set_user User.create(email: 'Thor', password: 'password', password_confirmation: 'password')}
+
   let(:company) {Company.create!(name: 'Marvel')}
 
   let(:file) {
