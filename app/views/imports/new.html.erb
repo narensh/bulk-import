@@ -2,12 +2,12 @@
 
 <%= form_for @import, url: {action: "create"} do |f| %>
   <div class="form-fields">
-    Company &nbsp;&nbsp;<%= collection_select(:import, :company_id, Company.all, :id, :name) %>
+    Company &nbsp;<%= collection_select(:import, :company_id, Company.all, :id, :name, {:prompt => 'select'}, {required: true}) %>
     <br/><br/>
     <%= f.label :file do %>
       Upload csv
       <%= f.file_field :file, required: true, accept: '.csv' %>
-  <% end %>
+    <% end %>
     <%= f.submit "Upload", class: 'form-actions' %>
   </div>
 <% end %>

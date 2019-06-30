@@ -14,7 +14,7 @@ class Employee < ApplicationRecord
   def assign_manager(manager_email)
     manager = Employee.find_by_email(manager_email)
 
-    raise ManagerNotFoundException if manager.blank?
+    raise Exceptions::ManagerNotFoundException if manager.blank?
 
     move_to_child_of(manager)
   end

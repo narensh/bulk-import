@@ -1,28 +1,35 @@
+require 'csv'
 module ImportsHelper
-include Exceptions
+  extend Exceptions
   # move to configuration
   BATCH_SIZE = 100
 
   class << self
     def create_imports(request_id, params)
       records = []
+      company = Company.find_by(id: params[:company_id])
+      raise CompanyNotFoundException if company.blank?
+
       CSV.foreach(params[:file].path, headers: true) do |row|
         records << {request_id: request_id, employee_name: row[0], email: row[1],
                     phone: row[2].try(:gsub, /[^0-9A-Za-z]/, ''),
-                    report_to: row[3], assigned_policies: row[4], company_id: params[:company_id],
+                    report_to: row[3], assigned_policies: row[4], company_id: company.id,
                     file_name: params[:file].original_filename}
       end
-      Import.create(records)
+      ActiveRecord::Base.transaction do
+        Import.create(records)
+      end
     end
 
     def process(request_id)
       process_in_batches(request_id, ImportStatus::NOT_STARTED) do |requests|
+        company = Company.find(requests.first.company_id)
         policies = process_policies(requests)
         mark_in_progress(requests)
         requests.each do |request|
           begin
             status = request.report_to.blank? ? ImportStatus::COMPLETED : ImportStatus::MANAGER_ASSIGNMENT_PENDING
-            EmployeesHelper.create_employee(request, policies)
+            EmployeesHelper.create_employee(company, request, policies)
           rescue ActiveRecord::RecordInvalid => e
             message = e.message
           end
@@ -51,7 +58,7 @@ include Exceptions
     def process_in_batches(request_id, status)
       Import.where(request_id: request_id, status: status)
           .find_in_batches(batch_size: BATCH_SIZE) do |requests|
-        yield(requests)
+        ActiveRecord::Base.transaction {yield(requests)}
       end
     end
 

@@ -12,7 +12,7 @@ RSpec.describe EmployeesHelper, :type => :helper do
                                      {name: 'Annual Leave', company: company},
                                      {name: 'Winter Leave', company: company}])
 
-      employee = EmployeesHelper.create_employee(employee_data, all_policies)
+      employee = EmployeesHelper.create_employee(company, employee_data, all_policies)
 
       expect(employee).to be_persisted
       expect(employee.name).to eq(employee_data.employee_name)
