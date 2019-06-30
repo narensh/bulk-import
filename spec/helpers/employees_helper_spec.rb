@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EmployeesHelper, :type => :helper do
 
-  context :create_employee do
+  context :initialize_employee do
     it 'should create employee' do
       company = Company.create!(name: 'Marvel')
       employee_data = double('Employee Data', request_id: 'dummy_request_id', employee_name: 'Thor Odinson', email: 'thor@marvel.com',
@@ -12,9 +12,7 @@ RSpec.describe EmployeesHelper, :type => :helper do
                                      {name: 'Annual Leave', company: company},
                                      {name: 'Winter Leave', company: company}])
 
-      employee = EmployeesHelper.create_employee(company, employee_data, all_policies)
-
-      expect(employee).to be_persisted
+      employee = EmployeesHelper.initialize_employee(company, employee_data, all_policies)
       expect(employee.name).to eq(employee_data.employee_name)
       expect(employee.email).to eq(employee_data.email)
       expect(employee.phone).to eq(employee_data.phone)

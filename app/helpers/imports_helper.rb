@@ -26,15 +26,19 @@ module ImportsHelper
         company = Company.find(requests.first.company_id)
         policies = process_policies(requests)
         mark_in_progress(requests)
-        requests.each do |request|
+        employees = requests.map do |request|
+          employee = nil
           begin
             status = request.report_to.blank? ? ImportStatus::COMPLETED : ImportStatus::MANAGER_ASSIGNMENT_PENDING
-            EmployeesHelper.create_employee(company, request, policies)
-          rescue ActiveRecord::RecordInvalid => e
+            employee = EmployeesHelper.initialize_employee(company, request, policies)
+          rescue Exceptions::EmployeeInvalidException => e
             message = e.message
           end
-          request.update(status: message.blank? ? status : ImportStatus::ERROR, message: message)
+          request.assign_attributes(status: message.blank? ? status : ImportStatus::ERROR, message: message)
+          employee
         end
+        call_save(requests)
+        call_save(employees)
       end
       assign_managers(request_id)
     end
@@ -72,6 +76,10 @@ module ImportsHelper
 
     def mark_in_progress(requests)
       Import.where(id: requests.map(&:id)).update_all(status: ImportStatus::IN_PROGRESS)
+    end
+
+    def call_save(records)
+      records.each {|record| record.save if record} if records
     end
   end
 end
