@@ -8,7 +8,8 @@
       Upload csv
       <%= f.file_field :file, required: true, accept: '.csv' %>
     <% end %>
-    <%= f.submit "Upload", class: 'form-actions' %>
   </div>
+  <%= f.submit "Upload", class: 'form-actions' %>
 <% end %>
+<br/>
 <div><%= link_to 'Back', imports_path %></div>
