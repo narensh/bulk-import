@@ -10,14 +10,21 @@
 
 return unless Rails.env == 'development'
 
-company = Company.create(name: 'Alphabet')
+company = Company.create(name: 'DC Comics')
 policies = Policy.create([
                              {name: 'Sick Leave', company_id: company.id},
                              {name: 'Annual Leave', company_id: company.id},
-                              {name: 'Maternity Leave', company_id: company.id}
+                             {name: 'Paternity Leave', company_id: company.id}
                          ])
 
-employee = Employee.create(name: 'Green Arrow', email: 'green_arrow@abc.com', phone: 9999999999, company_id: company.id)
+employee = Employee.create(name: 'Green Arrow', email: 'green_arrow@dc.com', phone: 9999999999, company_id: company.id)
+employee.policies << policies.first
+employee.save!
 
+employee = Employee.create(name: 'Superman', email: 'superman@dc.com', phone: 9999999900, company_id: company.id)
+employee.policies << policies.second
+employee.save!
+
+employee = Employee.create(name: 'Batman', email: 'i_am_batman@dc.com', phone: 9999999988, company_id: company.id)
 employee.policies << policies
 employee.save!
